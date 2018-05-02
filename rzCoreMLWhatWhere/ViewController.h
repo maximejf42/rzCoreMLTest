@@ -27,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *myActivityIndicator;
 
 @property (weak, nonatomic) IBOutlet UIImageView *myImage;
+
 @property (weak, nonatomic) IBOutlet UILabel *myInceptionV3Category;
 @property (weak, nonatomic) IBOutlet UILabel *myGoogleNetCategory;
 @property (weak, nonatomic) IBOutlet UILabel *mySqueezeNetCategory;
@@ -41,6 +42,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *myResNetPct;
 @property (weak, nonatomic) IBOutlet UILabel *myMobileNetPct;
 
+@property (weak, nonatomic) IBOutlet UILabel *myInceptionLabel;
+@property (weak, nonatomic) IBOutlet UILabel *myGoogleNetLabel;
+@property (weak, nonatomic) IBOutlet UILabel *mySqueezeNetLabel;
+@property (weak, nonatomic) IBOutlet UILabel *myVCC16Label;
+@property (weak, nonatomic) IBOutlet UILabel *myResNetLabel;
+@property (weak, nonatomic) IBOutlet UILabel *myMobileNetLabel;
 
 
 

@@ -34,6 +34,13 @@
 @synthesize myResNetPct;
 @synthesize myMobileNetPct;
 @synthesize mySqueezeNetPct;
+@synthesize myInceptionLabel;
+@synthesize myGoogleNetLabel;
+@synthesize mySqueezeNetLabel;
+@synthesize myVCC16Label;
+@synthesize myResNetLabel;
+@synthesize myMobileNetLabel;
+
 float myIV3Pct;
 float mySNPct;
 float myGNPct;
@@ -110,6 +117,7 @@ bool myWelcomeMessageWasShownOnce = false;
 
 - (IBAction)unwindToThisViewController:(UIStoryboardSegue *)unwindSegue{
     [myActivityIndicator stopAnimating];
+    [self dismissViewControllerAnimated:YES completion:nil];
     NSLog(@"segue returned here");
 }
 
@@ -121,31 +129,158 @@ bool myWelcomeMessageWasShownOnce = false;
     myIV3Pct = ([[myInceptionV3Output.classLabelProbs valueForKey:myInceptionV3Output.classLabel] floatValue]*100.0);
     [myInceptionV3Category setText:myInceptionV3Output.classLabel];
     [myInceptionPct setText:[NSString stringWithFormat:@" has %2.0f%% confidence that it's a",myIV3Pct]];
+
+    [myInceptionLabel setTextColor:UIColor.yellowColor];
+    [myInceptionPct setTextColor:UIColor.yellowColor];
+    [myInceptionV3Category setTextColor:UIColor.yellowColor];
+    if (myIV3Pct < 30.0 ) {
+        [myInceptionLabel setTextColor:UIColor.redColor];
+        [myInceptionPct setTextColor:UIColor.redColor];
+        [myInceptionV3Category setTextColor:UIColor.redColor];
+    }
+    if (myIV3Pct > 80.0 ) {
+        [myInceptionLabel setTextColor:UIColor.greenColor];
+        [myInceptionPct setTextColor:UIColor.greenColor];
+        [myInceptionV3Category setTextColor:UIColor.greenColor];
+    }
+    
+    
+    
+    
+    
     CVPixelBufferRef mySqueezeNetPixelBufferRef = [self myMakePixelBufferWithImage:myImage.image ofSize:227.0];
     SqueezeNetOutput *mySqueezeNetModelOutput = [mySqueezeNetModel predictionFromImage:mySqueezeNetPixelBufferRef error:nil];
+    
     mySNPct = ([[mySqueezeNetModelOutput.classLabelProbs valueForKey:mySqueezeNetModelOutput.classLabel] floatValue]*100.0);
     [mySqueezeNetCategory setText:mySqueezeNetModelOutput.classLabel];
     [mySqueezeNetPct setText:[NSString stringWithFormat:@" has %2.0f%% confidence that it's a",mySNPct]];
+    
+    [mySqueezeNetLabel setTextColor:UIColor.yellowColor];
+    [mySqueezeNetPct setTextColor:UIColor.yellowColor];
+    [mySqueezeNetCategory setTextColor:UIColor.yellowColor];
+
+    if (mySNPct < 30.0 ) {
+        [mySqueezeNetPct setTextColor:UIColor.redColor];
+        [mySqueezeNetCategory setTextColor:UIColor.redColor];
+        [mySqueezeNetLabel setTextColor:UIColor.redColor];
+    }
+    if (mySNPct > 80.0 ) {
+        [mySqueezeNetPct setTextColor:UIColor.greenColor];
+        [mySqueezeNetCategory setTextColor:UIColor.greenColor];
+        [mySqueezeNetLabel setTextColor:UIColor.greenColor];
+    }
+
+    
+    
+    
+    
+    
     CVPixelBufferRef myGoogleNetPlacesPixelBufferRef = [self myMakePixelBufferWithImage:myImage.image ofSize:224.0];
     GoogLeNetPlacesOutput *myGoogleNetPlacesOutput = [myGoogleModel predictionFromSceneImage:myGoogleNetPlacesPixelBufferRef error:nil];
     myGNPct = ([[myGoogleNetPlacesOutput.sceneLabelProbs valueForKey:myGoogleNetPlacesOutput.sceneLabel] floatValue]*100.0);
     [myGoogleNetCategory setText:myGoogleNetPlacesOutput.sceneLabel];
     [myGoogleNetPct setText:[NSString stringWithFormat:@" has %2.0f%% confidence it's a",myGNPct]];
+    
+    [myGoogleNetLabel setTextColor:UIColor.yellowColor];
+    [myGoogleNetPct setTextColor:UIColor.yellowColor];
+    [myGoogleNetCategory setTextColor:UIColor.yellowColor];
+
+    if (myGNPct < 30.0 ) {
+        [myGoogleNetLabel setTextColor:UIColor.redColor];
+        [myGoogleNetPct setTextColor:UIColor.redColor];
+        [myGoogleNetCategory setTextColor:UIColor.redColor];
+    }
+
+    if (myGNPct > 80.0 ) {
+        [myGoogleNetLabel setTextColor:UIColor.greenColor];
+        [myGoogleNetPct setTextColor:UIColor.greenColor];
+        [myGoogleNetCategory setTextColor:UIColor.greenColor];
+    }
+
+    
+
+    
+    
+    
+    
     CVPixelBufferRef myVGG16PixelBufferRef = [self myMakePixelBufferWithImage:myImage.image ofSize:224.0];
     VGG16Output *myVgg16Output = [myVGG16Model predictionFromImage:myVGG16PixelBufferRef error:nil];
     myVGNPct = ([[myVgg16Output.classLabelProbs valueForKey:myVgg16Output.classLabel] floatValue]*100.0);
     [myVGG16Category setText:myVgg16Output.classLabel];
     [myVCC16Pct setText:[NSString stringWithFormat:@" has %2.0f%% confidence it's a",myVGNPct]];
+    
+    
+    [myVCC16Label setTextColor:UIColor.yellowColor];
+    [myVCC16Pct setTextColor:UIColor.yellowColor];
+    [myVGG16Category setTextColor:UIColor.yellowColor];
+
+    if (myVGNPct < 30.0 ) {
+        [myVCC16Label setTextColor:UIColor.redColor];
+        [myVCC16Pct setTextColor:UIColor.redColor];
+        [myVGG16Category setTextColor:UIColor.redColor];
+    }
+    if (myVGNPct > 80.0 ) {
+        [myVCC16Label setTextColor:UIColor.greenColor];
+        [myVCC16Pct setTextColor:UIColor.greenColor];
+        [myVGG16Category setTextColor:UIColor.greenColor];
+    }
+
+    
+    
+    
+    
     CVPixelBufferRef myResNet50PixelBufferRef = [self myMakePixelBufferWithImage:myImage.image ofSize:224.0];
     Resnet50Output *myResNet50Output = [myResNet50Model predictionFromImage:myResNet50PixelBufferRef error:nil];
     myRNPct = ([[myResNet50Output.classLabelProbs valueForKey:myResNet50Output.classLabel] floatValue]*100.0);
     [myResNetCategory setText:myResNet50Output.classLabel];
     [myResNetPct setText:[NSString stringWithFormat:@" has %2.0f%% confidence it's a",myRNPct]];
+    
+    [myResNetLabel setTextColor:UIColor.yellowColor];
+    [myResNetPct setTextColor:UIColor.yellowColor];
+    [myResNetCategory setTextColor:UIColor.yellowColor];
+
+    if (myRNPct < 30.0 ) {
+        [myResNetLabel setTextColor:UIColor.redColor];
+        [myResNetPct setTextColor:UIColor.redColor];
+        [myResNetCategory setTextColor:UIColor.redColor];
+    }
+
+    if (myRNPct > 80.0 ) {
+        [myResNetLabel setTextColor:UIColor.greenColor];
+        [myResNetPct setTextColor:UIColor.greenColor];
+        [myResNetCategory setTextColor:UIColor.greenColor];
+    }
+    
+    
+    
+    
+    
     CVPixelBufferRef myMobileNetPixelBufferRef = [self myMakePixelBufferWithImage:myImage.image ofSize:224.0];
     MobileNetOutput *myMobileNetOutput = [myMobileNetModel predictionFromImage:myMobileNetPixelBufferRef error:nil];
     myMNPct = ([[myMobileNetOutput.classLabelProbs valueForKey:myMobileNetOutput.classLabel] floatValue]*100.0);
     [myMobileNetCategory setText:myMobileNetOutput.classLabel];
     [myMobileNetPct setText:[NSString stringWithFormat:@" has %2.0f%% confidence it's a",myMNPct]];
+    
+    [myMobileNetLabel setTextColor:UIColor.yellowColor];
+    [myMobileNetPct setTextColor:UIColor.yellowColor];
+    [myMobileNetCategory setTextColor:UIColor.yellowColor];
+
+    if (myMNPct < 30.0 ) {
+        [myMobileNetLabel setTextColor:UIColor.redColor];
+        [myMobileNetPct setTextColor:UIColor.redColor];
+        [myMobileNetCategory setTextColor:UIColor.redColor];
+    }
+
+    if (myMNPct > 80.0 ) {
+        [myMobileNetLabel setTextColor:UIColor.greenColor];
+        [myMobileNetPct setTextColor:UIColor.greenColor];
+        [myMobileNetCategory setTextColor:UIColor.greenColor];
+
+    }
+
+    
+    
+    
 }
 
 - (IBAction)myTakeAPhoto:(id)sender {
